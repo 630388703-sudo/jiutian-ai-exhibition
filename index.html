@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>九天智境 · 中国式现代化中的AI力量</title>
+<meta name="description" content="《九天智境》— Web端360°沉浸式数字展馆，以中国移动九天大模型为案例，探索人工智能赋能中国式现代化。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><circle cx=%2216%22 cy=%2216%22 r=%226%22 fill=%22%234c7cd6%22/><circle cx=%2216%22 cy=%2216%22 r=%2213%22 fill=%22none%22 stroke=%22%234c7cd6%22 stroke-width=%222%22/></svg>" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============================================================ LOADING ==== -->
+<div id="loading-screen">
+  <div class="loading-mark">九天智境</div>
+  <div class="loading-ring"><div class="beacon"></div></div>
+  <div class="loading-caption">Loading Digital Exhibition</div>
+  <div class="loading-bar"><i id="loading-bar-fill"></i></div>
+  <div class="loading-pct" id="loading-pct">0%</div>
+</div>
+
+<!-- ============================================================ HOME ==== -->
+<div id="home-screen" hidden>
+  <video id="home-video" autoplay muted loop playsinline poster="assets/video/home-poster.jpg">
+    <source src="assets/video/home-bg.mp4" type="video/mp4" />
+  </video>
+  <div class="home-scrim"></div>
+
+  <div class="home-topbar">
+    <div class="brand">JIUTIAN · AI EXHIBITION</div>
+    <div class="home-actions">
+      <button class="ghost-btn" id="home-sound-btn" type="button">开启声音</button>
+      <button class="ghost-btn" id="home-about-btn" type="button">关于作品</button>
+    </div>
+  </div>
+
+  <div class="home-center">
+    <div class="home-en">JIUTIAN · INTELLIGENT FUTURE</div>
+    <h1 class="home-title">九 天 智 境</h1>
+    <p class="home-sub">中国式现代化中的AI力量</p>
+    <p class="home-desc">探索人工智能如何连接产业、民生与城市未来 —— 一座可以拖动环视、点击探索的线上数字展馆。</p>
+    <button class="enter-btn" id="enter-btn" type="button">
+      <span class="beacon"></span>
+      <span>进入数字展馆</span>
+    </button>
+    <div class="home-tag">360° WEB EXPERIENCE</div>
+  </div>
+
+  <div class="home-footnote">建议佩戴耳机体验</div>
+</div>
+
+<!-- ============================================================ VIEWER ==== -->
+<div id="viewer-app" hidden>
+  <div id="viewer-container" role="application" aria-label="360度全景展馆"></div>
+
+  <div class="hud">
+    <div class="hud-top-left">
+      <div class="hud-counter" id="hud-counter">01 / 06</div>
+      <div class="hud-title" id="hud-title">未来AI大厅</div>
+      <div class="hud-subtitle" id="hud-subtitle">人工智能时代的到来</div>
+    </div>
+
+    <div class="hud-top-right">
+      <button class="icon-btn" id="map-btn" type="button" aria-label="展馆地图" title="展馆地图">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Z"/><path d="M9 3v16M15 5v16"/></svg>
+      </button>
+      <button class="icon-btn" id="audio-btn" type="button" aria-label="语音讲解" title="语音讲解">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M17 8a5 5 0 0 1 0 8" id="wave1"/><path d="M19.5 5.5a9 9 0 0 1 0 13" id="wave2"/></svg>
+      </button>
+      <button class="icon-btn" id="fullscreen-btn" type="button" aria-label="全屏" title="全屏">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+    </div>
+
+    <div class="hud-hint" id="hud-hint">拖动探索空间 · 点击热点发现内容</div>
+
+    <div class="hud-progress" id="hud-progress">EXPLORED&nbsp; <b id="progress-count">1</b> / 6</div>
+  </div>
+
+  <!-- 信息面板 -->
+  <aside id="info-panel" aria-live="polite">
+    <div class="panel-head">
+      <div>
+        <div class="panel-eyebrow" id="panel-eyebrow">HOTSPOT</div>
+        <h3 class="panel-title" id="panel-title">标题</h3>
+      </div>
+      <button class="panel-close" id="panel-close" aria-label="关闭">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="panel-body" id="panel-body"></div>
+  </aside>
+
+  <!-- 展馆地图 -->
+  <aside id="map-drawer" aria-label="展馆地图">
+    <div class="map-head">
+      <h3>展馆地图</h3>
+      <button class="panel-close" id="map-close" aria-label="关闭地图">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="map-list" id="map-list"></div>
+  </aside>
+</div>
+
+<!-- ============================================================ ABOUT MODAL ==== -->
+<div id="about-modal">
+  <div class="about-card">
+    <button class="panel-close" id="about-close" aria-label="关闭">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <h3>关于《九天智境》</h3>
+    <p>《九天智境：中国式现代化中的AI力量》是一部数字思政实践作品，以中国移动“九天大模型”为案例，围绕人工智能与产业、民生、社会治理及青年创造力的关系展开叙事，通过 360° 网页展馆呈现。</p>
+    <p>作品由数字媒体艺术专业学生独立完成创作，用于高校思想政治理论课实践教学环节。</p>
+    <p style="color:var(--ink-400); font-size:12px;">部分全景图、视频与语音讲解为第一版占位素材，将在后续持续替换为最终内容。</p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/128/three.min.js"></script>
+<script src="js/exhibition-data.js"></script>
+<script src="js/panorama.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
