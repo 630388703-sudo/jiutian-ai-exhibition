@@ -224,6 +224,27 @@ button { font-family: inherit; }
 #viewer-app { position: fixed; inset: 0; z-index: 10; background: var(--bg-base); }
 #viewer-container { position: absolute; inset: 0; }
 #viewer-container canvas { display: block; }
+.scene-boards { position:absolute; left:28px; bottom:32px; z-index:5; display:grid; grid-template-columns:minmax(280px,390px) 230px; gap:12px; pointer-events:none; }
+.scene-board { padding:18px 20px; border:1px solid rgba(255,255,255,.72); border-radius:16px; background:rgba(248,251,255,.78); box-shadow:0 14px 40px rgba(33,55,92,.12); backdrop-filter:blur(18px); }
+.scene-board-kicker { font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; color:var(--accent); }
+.scene-board h2 { margin:7px 0 8px; font-family:var(--font-display); font-size:20px; line-height:1.35; }
+.scene-board p { margin:0; color:var(--ink-700); font-size:12px; line-height:1.75; }
+.scene-board-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+.scene-board-tags span { padding:4px 8px; border:1px solid rgba(76,124,214,.22); border-radius:99px; color:var(--accent); font-size:10px; background:rgba(255,255,255,.55); }
+.scene-board-facts { display:grid; gap:9px; margin-top:10px; }
+.scene-fact { display:grid; grid-template-columns:28px 1fr; align-items:center; gap:8px; padding-top:8px; border-top:1px solid var(--line); }
+.scene-fact b { font-family:var(--font-mono); font-size:10px; color:var(--accent); }
+.scene-fact span { color:var(--ink-700); font-size:12px; }
+.scene-fact small { display:block; color:var(--ink-400); font-size:9px; letter-spacing:.08em; margin-bottom:2px; }
+
+@media (max-width: 700px) {
+  .scene-boards { left:12px; right:12px; bottom:64px; display:block; }
+  .scene-board { padding:13px 15px; }
+  .scene-board--facts { display:none; }
+  .scene-board h2 { font-size:16px; margin:4px 0 5px; }
+  .scene-board p { font-size:11px; line-height:1.55; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .scene-board-tags { margin-top:7px; }
+}
 
 .hotspot-layer { position: absolute; inset: 0; pointer-events: none; }
 .hotspot {
@@ -515,3 +536,4 @@ button { font-family: inherit; }
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
+
