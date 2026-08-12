@@ -435,6 +435,13 @@
 
   function startAmbience() {
     if (state.ambience) return;
+    const music = new Audio("assets/audio/background/background-music.mp3");
+    music.loop = true; music.volume = 0.22;
+    music.play().then(() => { state.ambience = { music }; }).catch(() => startSynthAmbience());
+  }
+
+  function startSynthAmbience() {
+    if (state.ambience) return;
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return;
     const ctx = new Ctx(); const gain = ctx.createGain(); gain.gain.value = 0.025; gain.connect(ctx.destination);
@@ -451,7 +458,11 @@
     } else if (state.audioEl) {
       state.audioEl.pause();
       if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-      if (state.ambience) { state.ambience.ctx.close(); state.ambience = null; }
+      if (state.ambience) {
+        if (state.ambience.music) { state.ambience.music.pause(); state.ambience.music.currentTime = 0; }
+        if (state.ambience.ctx) state.ambience.ctx.close();
+        state.ambience = null;
+      }
     }
   }
 
