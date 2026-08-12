@@ -51,6 +51,9 @@
     audioEl: null,
     hintShown: false,
     firstEnter: true,
+    switching: false,
+    speech: null,
+    ambience: null,
   };
 
   let viewer = null;
@@ -152,7 +155,8 @@
   // ---------------------------------------------------------------- 场景切换 ----
   function loadScene(sceneId, opts) {
     const scene = DATA.scenes[sceneId];
-    if (!scene) return;
+    if (!scene || state.switching) return;
+    state.switching = true;
     const options = opts || {};
     const isFirst = state.currentSceneId === null;
 
@@ -166,6 +170,9 @@
     state.currentNodeId = node.id;
     viewer.loadPanorama(node.image, scene.initialView, { fade: !isFirst && options.fade !== false }).then(() => {
       setNodeHotspots(scene, node.id);
+      state.switching = false;
+      const nextIndex = (DATA.sceneOrder.indexOf(sceneId) + 1) % DATA.sceneOrder.length;
+      viewer.preload(DATA.scenes[DATA.sceneOrder[nextIndex]].panoramaNodes.map((item) => item.image));
     });
 
     dom.hudCounter.textContent = pad2(scene.order) + " / 06";
@@ -414,16 +421,37 @@
       });
     }
     state.audioEl.src = scene.audio;
-    state.audioEl.play().catch(() => {});
+    state.audioEl.play().catch(() => speakScene(scene));
+  }
+
+  function speakScene(scene) {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const board = BOARD_CONTENT[scene.id];
+    const utterance = new SpeechSynthesisUtterance(`${scene.title}。${board ? board[2] : scene.subtitle}`);
+    utterance.lang = "zh-CN"; utterance.rate = 0.92; utterance.pitch = 1;
+    state.speech = utterance; window.speechSynthesis.speak(utterance);
+  }
+
+  function startAmbience() {
+    if (state.ambience) return;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx(); const gain = ctx.createGain(); gain.gain.value = 0.025; gain.connect(ctx.destination);
+    [110, 164.81, 220].forEach((frequency) => { const osc = ctx.createOscillator(); osc.type = "sine"; osc.frequency.value = frequency; osc.connect(gain); osc.start(); });
+    state.ambience = { ctx, gain };
   }
 
   function toggleAudio() {
     state.audioEnabled = !state.audioEnabled;
     dom.audioBtn.classList.toggle("active", state.audioEnabled);
     if (state.audioEnabled) {
+      startAmbience();
       playSceneAudio(DATA.scenes[state.currentSceneId]);
     } else if (state.audioEl) {
       state.audioEl.pause();
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      if (state.ambience) { state.ambience.ctx.close(); state.ambience = null; }
     }
   }
 
