@@ -160,6 +160,11 @@
   PanoramaViewer.prototype.loadPanorama = function (url, initialView, opts) {
     const options = opts || {};
     const self = this;
+    // CSS 背景作为 WebGL/纹理解码兜底。低性能设备或关闭硬件加速时仍能看到全景素材。
+    self.container.style.backgroundImage = 'url("' + url.replace(/"/g, "%22") + '")';
+    self.container.style.backgroundSize = "cover";
+    self.container.style.backgroundPosition = "center";
+    self.container.style.backgroundRepeat = "no-repeat";
     return new Promise((resolve) => {
       self.textureLoader.load(
         url,
@@ -188,9 +193,10 @@
         },
         undefined,
         () => {
-          // 加载失败：使用纯色占位，不阻断体验
+          // WebGL 纹理加载失败时保留 CSS 图片兜底，不阻断体验。
           self.material.map = null;
-          self.material.color.set(0xc9d6e4);
+          self.material.transparent = true;
+          self.material.opacity = 0;
           self.material.needsUpdate = true;
           self.ready = true;
           resolve(false);
@@ -285,3 +291,4 @@
 
   window.PanoramaViewer = PanoramaViewer;
 })();
+
