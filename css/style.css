@@ -218,6 +218,8 @@ button { font-family: inherit; }
   font-size: 11px; letter-spacing: .18em;
   color: rgba(255,255,255,.5); text-transform: uppercase;
 }
+.creator-credit { margin-top:16px; color:rgba(255,255,255,.76); font-size:12px; letter-spacing:.08em; }
+.creator-credit span { color:var(--accent-soft); margin-right:7px; }
 .home-footnote {
   position: absolute; bottom: 22px; left: 0; right: 0;
   text-align: center; z-index: 2;
