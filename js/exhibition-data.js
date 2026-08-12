@@ -1,3 +1,6 @@
+Exit code: 0
+Wall time: 4.1 seconds
+Output:
 /**
  * 九天智境 · 展馆数据配置
  * ------------------------------------------------------------
@@ -10,7 +13,7 @@
  *   order         在主叙事中的序号 (01/06 ... 06/06)
  *   title / subtitle / titleEn   展示文字
  *   panorama      全景图路径（可以是数组，多张代表同一展厅的多个节点）
- *   audio         讲解音频路径（占位，可能不存在）
+ *   audio         可选讲解音频路径（缺失时静默降级）
  *   initialView   { yaw, pitch } 进入时的初始朝向（角度）
  *   ambience      顶部渐变主题色（用于该展厅的 UI 强调色）
  *   hotspots      热点数组，每个至少 3 个
@@ -22,7 +25,7 @@
  *   type          'text' | 'video' | 'image' | 'diagram' | 'scene'
  *   summary       弹窗中的简介文字
  *   body          正文内容（可为空）
- *   media         { video, image, poster } 关联媒体路径（可能是 placeholder）
+ *   media         { video, image, poster } 关联正式媒体路径
  *   targetScene   type = 'scene' 时，跳转的目标场景 id
  */
 
@@ -46,7 +49,7 @@ const EXHIBITION_DATA = {
       subtitle: "人工智能时代的到来",
       panoramaNodes: [
         { id: "hall-01", image: "assets/panorama/hall-01.png" },
-        { id: "hall-02", image: "assets/panorama/hall-02.jpg" },
+        { id: "hall-02", image: "assets/panorama/hall-02.png" },
       ],
       audio: "assets/audio/hall.mp3",
       initialView: { yaw: 0, pitch: 0 },
@@ -122,8 +125,8 @@ const EXHIBITION_DATA = {
       titleEn: "JIUTIAN FOUNDATION MODEL",
       subtitle: "中国移动九天大模型",
       panoramaNodes: [
-        { id: "jiutian-01", image: "assets/panorama/jiutian-01.jpg" },
-        { id: "jiutian-02", image: "assets/panorama/jiutian-02.jpg" },
+        { id: "jiutian-01", image: "assets/panorama/jiutian-01.png" },
+        { id: "jiutian-02", image: "assets/panorama/jiutian-02.png" },
       ],
       audio: "assets/audio/jiutian.mp3",
       initialView: { yaw: 0, pitch: 0 },
@@ -148,7 +151,7 @@ const EXHIBITION_DATA = {
           summary: "了解九天大模型的能力与应用方向。",
           media: {
             video: "assets/video/jiutian.mp4",
-            poster: "assets/panorama/jiutian-01.jpg",
+            poster: "assets/video/jiutian-poster.jpg",
           },
           body:
             "九天大模型具备文本、图像、多模态等能力，能够服务于智慧政务、智慧医疗、智慧教育和智慧城市等多个领域，为中国式现代化建设提供智能化支持。",
@@ -202,8 +205,8 @@ const EXHIBITION_DATA = {
       titleEn: "INTELLIGENT INDUSTRY",
       subtitle: "AI × 智能制造",
       panoramaNodes: [
-        { id: "industry-01", image: "assets/panorama/industry-01.jpg" },
-        { id: "industry-02", image: "assets/panorama/industry-02.jpg" },
+        { id: "industry-01", image: "assets/panorama/industry-01.png" },
+        { id: "industry-02", image: "assets/panorama/industry-02.png" },
       ],
       audio: "assets/audio/industry.mp3",
       initialView: { yaw: 0, pitch: 0 },
@@ -228,7 +231,7 @@ const EXHIBITION_DATA = {
           summary: "智能制造应用场景影像。",
           media: {
             video: "assets/video/industry.mp4",
-            poster: "assets/panorama/industry-01.jpg",
+            poster: "assets/video/industry-poster.jpg",
           },
         },
         {
@@ -264,8 +267,8 @@ const EXHIBITION_DATA = {
       titleEn: "AI FOR PEOPLE",
       subtitle: "AI服务人民生活",
       panoramaNodes: [
-        { id: "people-01", image: "assets/panorama/people-01.jpg" },
-        { id: "people-02", image: "assets/panorama/people-02.jpg" },
+        { id: "people-01", image: "assets/panorama/people-01.png" },
+        { id: "people-02", image: "assets/panorama/people-02.png" },
       ],
       audio: "assets/audio/people.mp3",
       initialView: { yaw: 0, pitch: 0 },
@@ -280,7 +283,7 @@ const EXHIBITION_DATA = {
           summary: "AI与数字技术服务公共健康。",
           media: {
             video: "assets/video/people.mp4",
-            poster: "assets/panorama/people-01.jpg",
+            poster: "assets/video/people-poster.jpg",
           },
           body: "在健康服务领域，人工智能与数字技术的应用，为公共服务提供了更加智能、高效的新方式。",
         },
@@ -293,7 +296,7 @@ const EXHIBITION_DATA = {
           summary: "AI学习助手与数字课堂。",
           media: {
             video: "assets/video/people.mp4",
-            poster: "assets/panorama/people-02.jpg",
+            poster: "assets/video/people-poster.jpg",
           },
           body: "在教育领域，智能学习工具不断丰富教学方式，让数字技术更好地服务学习与成长。",
         },
@@ -325,7 +328,7 @@ const EXHIBITION_DATA = {
       title: "智慧城市",
       titleEn: "SMART CITY",
       subtitle: "社会治理现代化",
-      panoramaNodes: [{ id: "city-01", image: "assets/panorama/city-01.jpg" }],
+      panoramaNodes: [{ id: "city-01", image: "assets/panorama/city-01.png" }],
       audio: "assets/audio/city.mp3",
       initialView: { yaw: 0, pitch: 0 },
       ambience: "#5f8fd6",
@@ -362,7 +365,7 @@ const EXHIBITION_DATA = {
           summary: "智慧城市治理影像。",
           media: {
             video: "assets/video/city.mp4",
-            poster: "assets/panorama/city-01.jpg",
+            poster: "assets/video/city-poster.jpg",
           },
         },
         {
@@ -384,7 +387,7 @@ const EXHIBITION_DATA = {
       title: "青年与未来",
       titleEn: "CREATE THE FUTURE",
       subtitle: "科技赋能未来 · 青年创造未来",
-      panoramaNodes: [{ id: "future-01", image: "assets/panorama/future-01.jpg" }],
+      panoramaNodes: [{ id: "future-01", image: "assets/panorama/future-01.png" }],
       audio: "assets/audio/future.mp3",
       initialView: { yaw: 0, pitch: 0 },
       ambience: "#a98ce0",
@@ -417,7 +420,7 @@ const EXHIBITION_DATA = {
           summary: "《青年与AI未来》",
           media: {
             video: "assets/video/future.mp4",
-            poster: "assets/panorama/future-01.jpg",
+            poster: "assets/video/future-poster.jpg",
           },
           body:
             "人工智能正在改变我们的创作方式，也为青年提供了探索未来的新工具。作为数字媒体艺术专业学生，我们也将用创意与技术参与数字化发展的进程。",
@@ -437,5 +440,34 @@ const EXHIBITION_DATA = {
   },
 };
 
+// 为多节点展厅补充节点间导览，并确保每张全景图至少有 3 个可操作热点。
+Object.values(EXHIBITION_DATA.scenes).forEach((scene) => {
+  if (scene.panoramaNodes.length > 1) {
+    scene.panoramaNodes.forEach((node, index) => {
+      const target = scene.panoramaNodes[(index + 1) % scene.panoramaNodes.length];
+      scene.hotspots.push({
+        id: `${node.id}-tour-next`, node: node.id,
+        position: { yaw: 135, pitch: -8 }, title: `前往${target.id}`,
+        type: "node", summary: "继续参观本展厅的下一处空间。", targetNode: target.id,
+      });
+    });
+  }
+  scene.panoramaNodes.forEach((node) => {
+    const positions = [{ yaw: -95, pitch: 2 }, { yaw: 95, pitch: 2 }, { yaw: 175, pitch: -4 }];
+    let count = scene.hotspots.filter((hotspot) => hotspot.node === node.id).length;
+    while (count < 3) {
+      const slot = positions[count];
+      scene.hotspots.push({
+        id: `${node.id}-guide-${count + 1}`, node: node.id, position: slot,
+        title: count === 1 ? "空间导览" : "主题延伸",
+        type: "text", summary: `${scene.title} · ${scene.subtitle}`,
+        body: `这里是“${scene.title}”展区的组成空间。请拖动视角观察全景，并通过不同热点继续了解${scene.subtitle}的主题内容。`,
+      });
+      count += 1;
+    }
+  });
+});
+
 // 供其他脚本使用（浏览器全局 + 简单模块化）
 window.EXHIBITION_DATA = EXHIBITION_DATA;
+
