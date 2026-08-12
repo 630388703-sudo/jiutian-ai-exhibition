@@ -31,6 +31,7 @@
 
     this.hotspotEls = new Map(); // id -> {el, yaw, pitch}
     this.currentTexture = null;
+    this.textureCache = new Map();
     this.ready = false;
 
     this._initThree();
@@ -165,31 +166,23 @@
     self.container.style.backgroundSize = "cover";
     self.container.style.backgroundPosition = "center";
     self.container.style.backgroundRepeat = "no-repeat";
+    const cached = self.textureCache.get(url);
     return new Promise((resolve) => {
+      const applyTexture = (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace || THREE.sRGBEncoding;
+        const swap = () => {
+          self.material.opacity = 1; self.material.transparent = false;
+          self.material.map = texture; self.material.needsUpdate = true; self.currentTexture = texture;
+          if (initialView) { self.lon = self.targetLon = initialView.yaw || 0; self.lat = self.targetLat = initialView.pitch || 0; }
+          self.ready = true; resolve(true);
+        };
+        if (options.fade) self._fadeOut(() => { swap(); self._fadeIn(); }); else swap();
+      };
+      if (cached) { applyTexture(cached); return; }
       self.textureLoader.load(
         url,
         (texture) => {
-          texture.colorSpace = THREE.SRGBColorSpace || THREE.sRGBEncoding;
-          const swap = () => {
-            if (self.currentTexture) self.currentTexture.dispose();
-            self.material.map = texture;
-            self.material.needsUpdate = true;
-            self.currentTexture = texture;
-            if (initialView) {
-              self.lon = self.targetLon = initialView.yaw || 0;
-              self.lat = self.targetLat = initialView.pitch || 0;
-            }
-            self.ready = true;
-            resolve(true);
-          };
-          if (options.fade) {
-            self._fadeOut(() => {
-              swap();
-              self._fadeIn();
-            });
-          } else {
-            swap();
-          }
+          self.textureCache.set(url, texture); applyTexture(texture);
         },
         undefined,
         () => {
@@ -207,10 +200,17 @@
 
   PanoramaViewer.prototype._fadeOut = function (cb) {
     const dom = this.renderer.domElement;
-    dom.style.transition = "opacity .5s ease, filter .5s ease";
-    dom.style.filter = "blur(6px)";
+    dom.style.transition = "opacity .22s ease, filter .22s ease";
+    dom.style.filter = "blur(2px)";
     dom.style.opacity = "0";
-    setTimeout(cb, 480);
+    setTimeout(cb, 210);
+  };
+  PanoramaViewer.prototype.preload = function (urls) {
+    const self = this;
+    (urls || []).forEach((url) => {
+      if (self.textureCache.has(url)) return;
+      self.textureLoader.load(url, (texture) => { texture.colorSpace = THREE.SRGBColorSpace || THREE.sRGBEncoding; self.textureCache.set(url, texture); });
+    });
   };
   PanoramaViewer.prototype._fadeIn = function () {
     const dom = this.renderer.domElement;
