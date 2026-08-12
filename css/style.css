@@ -265,8 +265,8 @@ button { font-family: inherit; }
 
 .welcome-modal { position:fixed; inset:0; z-index:120; display:grid; place-items:center; padding:24px; background:rgba(17,28,47,.42); backdrop-filter:blur(12px); opacity:0; visibility:hidden; transition:.35s ease; }
 .welcome-modal.open { opacity:1; visibility:visible; }
-.welcome-card { width:min(860px,94vw); min-height:500px; display:grid; grid-template-columns:310px 1fr; align-items:end; overflow:hidden; border:1px solid rgba(255,255,255,.75); border-radius:26px; background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(231,241,255,.94)); box-shadow:0 30px 90px rgba(21,44,82,.28); }
-.welcome-guide { width:100%; max-height:510px; object-fit:contain; object-position:center bottom; filter:drop-shadow(0 16px 25px rgba(54,91,147,.18)); }
+.welcome-card { position:relative; width:min(860px,94vw); min-height:500px; display:grid; grid-template-columns:310px 1fr; overflow:hidden; border:1px solid rgba(255,255,255,.75); border-radius:26px; background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(231,241,255,.94)); box-shadow:0 30px 90px rgba(21,44,82,.28); }
+.welcome-guide { position:absolute; left:0; bottom:0; width:310px; height:480px; object-fit:contain; object-position:center bottom; display:block; filter:drop-shadow(0 16px 25px rgba(54,91,147,.18)); }
 .welcome-copy { padding:46px 42px 42px 14px; align-self:center; }
 .welcome-kicker { font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; color:var(--accent); }
 .welcome-copy h2 { margin:10px 0 15px; font-family:var(--font-display); font-size:30px; }
@@ -280,7 +280,7 @@ button { font-family: inherit; }
 .guide-button span { text-align:left; color:var(--ink-700); }
 .guide-button b,.guide-button small { display:block; }
 .guide-button b { font-size:12px; }.guide-button small { font-size:9px; color:var(--ink-400); margin-top:2px; }
-@media (max-width:700px){.welcome-card{grid-template-columns:110px 1fr; min-height:0}.welcome-guide{max-height:330px}.welcome-copy{padding:25px 20px 25px 0}.welcome-copy h2{font-size:21px}.welcome-copy>p{font-size:12px;line-height:1.65}.welcome-steps span{font-size:11px;padding:7px}.guide-button span{display:none}.guide-button{right:12px;bottom:12px;padding:4px}.hotspot::before{display:none}}
+@media (max-width:700px){.welcome-card{grid-template-columns:96px 1fr; min-height:0}.welcome-guide{left:-12px;width:120px;height:310px}.welcome-copy{padding:25px 20px 25px 0}.welcome-copy h2{font-size:21px}.welcome-copy>p{font-size:12px;line-height:1.65}.welcome-steps span{font-size:11px;padding:7px}.guide-button span{display:none}.guide-button{right:12px;bottom:12px;padding:4px}.hotspot::before{display:none}}
 .hotspot-dot {
   width: 16px; height: 16px; border-radius: 50%;
   background: var(--surface-strong);
