@@ -283,6 +283,7 @@
 
   function closePanel() {
     dom.panelBody.querySelectorAll("video").forEach((video) => video.pause());
+    if (state.ambience && state.ambience.music) state.ambience.music.volume = 0.1;
     dom.infoPanel.classList.remove("open");
   }
 
@@ -300,16 +301,28 @@
     video.appendChild(source);
     wrap.appendChild(video);
 
+    video.addEventListener("play", () => {
+      if (state.audioEl) state.audioEl.pause();
+      if (state.ambience && state.ambience.music) state.ambience.music.volume = 0.025;
+    });
+    const restoreAmbience = () => {
+      if (state.ambience && state.ambience.music) state.ambience.music.volume = 0.1;
+    };
+    video.addEventListener("pause", restoreAmbience);
+    video.addEventListener("ended", restoreAmbience);
+
     const fallback = document.createElement("div");
     fallback.className = "media-fallback";
     fallback.hidden = true;
     fallback.innerHTML = "<span>🎬</span><span>视频暂时无法加载<br/>请检查网络后重试</span>";
     wrap.appendChild(fallback);
 
-    video.addEventListener("error", () => {
+    const showVideoError = () => {
       video.hidden = true;
       fallback.hidden = false;
-    });
+    };
+    video.addEventListener("error", showVideoError);
+    source.addEventListener("error", showVideoError);
     return wrap;
   }
 
