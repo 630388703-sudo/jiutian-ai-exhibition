@@ -40,6 +40,7 @@
     mapClose: el("map-close"),
     aboutModal: el("about-modal"),
     aboutClose: el("about-close"),
+    welcomeModal: el("welcome-modal"), welcomeEnter: el("welcome-enter"), guideButton: el("guide-button"),
   };
 
   const state = {
@@ -121,6 +122,8 @@
     dom.aboutModal.addEventListener("click", (e) => {
       if (e.target === dom.aboutModal) dom.aboutModal.classList.remove("open");
     });
+    dom.welcomeEnter.addEventListener("click", () => dom.welcomeModal.classList.remove("open"));
+    dom.guideButton.addEventListener("click", () => dom.welcomeModal.classList.add("open"));
   }
 
   function enterExhibition() {
@@ -134,6 +137,7 @@
       dom.viewerApp.removeAttribute("hidden");
       initViewerOnce();
       loadScene("hall", { fade: false });
+      setTimeout(() => dom.welcomeModal.classList.add("open"), 500);
     }, 550);
   }
 
