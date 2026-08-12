@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 82" role="img" aria-labelledby="title">
+  <title id="title">中国移动 China Mobile</title>
+  <g fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 53 31 18l19 35 19-35 19 35"/>
+    <path d="M22 61h56" opacity=".9"/>
+  </g>
+  <g fill="#fff">
+    <text x="108" y="42" font-size="30" font-weight="700" font-family="Noto Sans SC,Microsoft YaHei,sans-serif" letter-spacing="4">中国移动</text>
+    <text x="110" y="66" font-size="13" font-weight="600" font-family="Arial,sans-serif" letter-spacing="4">CHINA MOBILE</text>
+  </g>
+</svg>
+
