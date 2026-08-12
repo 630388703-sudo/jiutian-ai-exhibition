@@ -20,6 +20,8 @@
     enterBtn: el("enter-btn"),
     viewerApp: el("viewer-app"),
     viewerContainer: el("viewer-container"),
+    boardKicker: el("board-kicker"), boardTitle: el("board-title"), boardIntro: el("board-intro"),
+    boardTags: el("board-tags"), boardFacts: el("board-facts"),
     hudCounter: el("hud-counter"),
     hudTitle: el("hud-title"),
     hudSubtitle: el("hud-subtitle"),
@@ -51,6 +53,14 @@
   };
 
   let viewer = null;
+  const BOARD_CONTENT = {
+    hall: ["01 · OPENING HALL", "智能时代，从这里启程", "人工智能正从技术创新走向广泛应用，连接产业升级、民生服务与城市治理。本展厅建立全馆叙事坐标，邀请你观察 AI 如何参与中国式现代化。", ["科技创新", "现代化建设", "数字中国"], [["观看", "智能时代序章"], ["理解", "AI赋能图谱"], ["前往", "九天大模型中心"]]],
+    jiutian: ["02 · FOUNDATION MODEL", "从通用能力到行业实践", "九天大模型连接文本、视觉与多模态能力，并面向政务、医疗、教育、工业和城市等场景探索智能化应用。", ["自主创新", "多模态", "行业大模型"], [["核心能力", "理解与生成"], ["应用路径", "模型＋行业"], ["参观分支", "产业／民生／城市"]]],
+    industry: ["03 · INTELLIGENT INDUSTRY", "制造业的智能化跃迁", "数据、算法与生产流程深度协同，让设备状态可感知、生产过程可分析、资源调度更灵活，推动制造向高端化与智能化演进。", ["智能制造", "柔性生产", "数据协同"], [["生产", "智能排程"], ["质量", "视觉检测"], ["运维", "预测性维护"]]],
+    people: ["04 · AI FOR PEOPLE", "让技术更有民生温度", "人工智能的价值不仅在实验室，更体现在每一次就医、学习和公共服务体验中。技术应用应回应真实需求，增进民生福祉。", ["智慧健康", "智慧教育", "普惠服务"], [["健康", "辅助服务"], ["教育", "个性学习"], ["价值", "以人为本"]]],
+    city: ["05 · SMART CITY", "城市治理的数字协同", "城市运行产生的多源信息经过汇聚、分析与反馈，帮助交通、环境和公共服务形成更及时、更精细的治理闭环。", ["智慧交通", "城市大脑", "协同治理"], [["感知", "多源数据"], ["分析", "智能研判"], ["响应", "协同调度"]]],
+    future: ["06 · CREATE THE FUTURE", "青年是未来的创造者", "面对智能时代，青年既是新技术的使用者，也是数字文化与社会价值的创造者。理解技术、保持判断、勇于实践，是面向未来的重要能力。", ["青年创新", "数字艺术", "人机协作"], [["学习", "理解AI"], ["创作", "善用工具"], ["责任", "保持判断"]]],
+  };
 
   // ---------------------------------------------------------------- 加载流程 ----
   function preload() {
@@ -158,6 +168,7 @@
     dom.hudTitle.textContent = scene.title;
     dom.hudSubtitle.textContent = scene.subtitle;
     dom.progressCount.textContent = String(state.visited.size);
+    renderSceneBoards(sceneId);
 
     updateAudioForScene(scene);
     renderMap();
@@ -166,6 +177,14 @@
       state.hintShown = true;
       setTimeout(() => dom.hudHint.setAttribute("hidden", ""), 3400);
     }
+  }
+
+  function renderSceneBoards(sceneId) {
+    const content = BOARD_CONTENT[sceneId];
+    if (!content) return;
+    dom.boardKicker.textContent = content[0]; dom.boardTitle.textContent = content[1]; dom.boardIntro.textContent = content[2];
+    dom.boardTags.innerHTML = content[3].map((tag) => `<span>${tag}</span>`).join("");
+    dom.boardFacts.innerHTML = content[4].map(([label, value], i) => `<div class="scene-fact"><b>0${i + 1}</b><span><small>${label}</small>${value}</span></div>`).join("");
   }
 
   function setNodeHotspots(scene, nodeId) {
