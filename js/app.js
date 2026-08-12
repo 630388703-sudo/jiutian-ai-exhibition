@@ -1,3 +1,6 @@
+Exit code: 0
+Wall time: 1.3 seconds
+Output:
 /**
  * 九天智境 · 应用主逻辑
  * 负责：加载流程、首页、场景切换、热点弹窗、地图、语音讲解、全屏、无障碍收尾
@@ -42,6 +45,7 @@
 
   const state = {
     currentSceneId: null,
+    currentNodeId: null,
     visited: new Set(),
     audioEnabled: false,
     audioEl: null,
@@ -148,10 +152,9 @@
     state.visited.add(sceneId);
 
     const node = scene.panoramaNodes[0];
+    state.currentNodeId = node.id;
     viewer.loadPanorama(node.image, scene.initialView, { fade: !isFirst && options.fade !== false }).then(() => {
-      viewer.setHotspots(
-        scene.hotspots.map((h) => ({ id: h.id, type: h.type, title: h.title, position: h.position }))
-      );
+      setNodeHotspots(scene, node.id);
     });
 
     dom.hudCounter.textContent = pad2(scene.order) + " / 06";
@@ -168,6 +171,21 @@
     }
   }
 
+  function setNodeHotspots(scene, nodeId) {
+    viewer.setHotspots(scene.hotspots
+      .filter((h) => h.node === nodeId)
+      .map((h) => ({ id: h.id, type: h.type, title: h.title, position: h.position })));
+  }
+
+  function loadNode(nodeId) {
+    const scene = DATA.scenes[state.currentSceneId];
+    const node = scene && scene.panoramaNodes.find((item) => item.id === nodeId);
+    if (!node) return;
+    closePanel();
+    state.currentNodeId = nodeId;
+    viewer.loadPanorama(node.image, scene.initialView, { fade: true }).then(() => setNodeHotspots(scene, nodeId));
+  }
+
   function pad2(n) { return n < 10 ? "0" + n : String(n); }
 
   function findHotspot(id) {
@@ -182,6 +200,10 @@
 
     if (h.type === "scene") {
       loadScene(h.targetScene, { fade: true });
+      return;
+    }
+    if (h.type === "node") {
+      loadNode(h.targetNode);
       return;
     }
     openPanel(h);
@@ -232,7 +254,10 @@
     dom.infoPanel.classList.add("open");
   }
 
-  function closePanel() { dom.infoPanel.classList.remove("open"); }
+  function closePanel() {
+    dom.panelBody.querySelectorAll("video").forEach((video) => video.pause());
+    dom.infoPanel.classList.remove("open");
+  }
 
   function buildVideoBlock(h) {
     const wrap = document.createElement("div");
@@ -251,7 +276,7 @@
     const fallback = document.createElement("div");
     fallback.className = "media-fallback";
     fallback.hidden = true;
-    fallback.innerHTML = "<span>🎬</span><span>视频素材待上传<br/>TODO：替换为最终AI生成视频</span>";
+    fallback.innerHTML = "<span>🎬</span><span>视频暂时无法加载<br/>请检查网络后重试</span>";
     wrap.appendChild(fallback);
 
     video.addEventListener("error", () => {
@@ -416,3 +441,4 @@
     preload();
   });
 })();
+
