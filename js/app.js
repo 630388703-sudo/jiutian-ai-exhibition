@@ -436,7 +436,7 @@
   function startAmbience() {
     if (state.ambience) return;
     const music = new Audio("assets/audio/background/background-music.mp3");
-    music.loop = true; music.volume = 0.22;
+    music.loop = true; music.volume = 0.1;
     music.play().then(() => { state.ambience = { music }; }).catch(() => startSynthAmbience());
   }
 
