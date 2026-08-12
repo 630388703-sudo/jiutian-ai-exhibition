@@ -45,7 +45,7 @@ const EXHIBITION_DATA = {
       titleEn: "FUTURE AI HALL",
       subtitle: "人工智能时代的到来",
       panoramaNodes: [
-        { id: "hall-01", image: "assets/panorama/hall-01.jpg" },
+        { id: "hall-01", image: "assets/panorama/hall-01.png" },
         { id: "hall-02", image: "assets/panorama/hall-02.jpg" },
       ],
       audio: "assets/audio/hall.mp3",
@@ -71,7 +71,7 @@ const EXHIBITION_DATA = {
           summary: "《智能时代·未来中国》",
           media: {
             video: "assets/video/opening.mp4",
-            poster: "assets/panorama/hall-01.jpg",
+            poster: "assets/panorama/hall-01.png",
           },
           body:
             "当人工智能技术不断发展，一个全新的智能时代正在到来。人工智能正在融入产业、医疗、教育和城市治理等多个领域，推动社会运行方式不断升级。欢迎来到《九天智境》数字展馆，让我们一起探索人工智能如何赋能中国式现代化。",

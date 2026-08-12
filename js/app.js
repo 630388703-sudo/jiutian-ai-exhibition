@@ -55,7 +55,7 @@
   function preload() {
     const assets = [
       "assets/video/home-poster.jpg",
-      "assets/panorama/hall-01.jpg",
+      "assets/panorama/hall-01.png",
     ];
     let loaded = 0;
     const total = assets.length;
